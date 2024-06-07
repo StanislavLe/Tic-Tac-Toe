@@ -5,15 +5,33 @@
     height: 100vh;
 }
 
+body {
+    background-color: #323232;
+    font-family: 'Open Sans', sans-serif;
+}
+
 table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 5px solid white;
 }
 
 td {
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 2em;
-    border: 1px solid #000;
+    padding: 0;
+}
+
+td:first-child {
+    border-left: none;
+}
+
+td:last-child {
+    border-right: none;
+}
+
+tr:first-child td {
+    border-top: none;
+}
+
+tr:last-child td {
+    border-bottom: none;
 }
