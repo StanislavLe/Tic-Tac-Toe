@@ -1,6 +1,7 @@
 const cross = getAnimatedCross(); // Zuweisung für Spieler mit Kreuz Symbol
-const circle = getAnimatedCircle(); // Zuweisung für Spieler mit Kreis Symbol
+const ring = getAnimatedCircle(); // Zuweisung für Spieler mit Kreis Symbol
 let currentPlayer = 'cross';
+let gameOver = false;
 
 let fields = [  // Array mit Feldzuständen
     null,
@@ -89,14 +90,74 @@ function getAnimatedCross() {
 
 
 function handleClick(index) {
-    if (!fields[index]) {
+    if (!fields[index] && !gameOver) {
         if (currentPlayer === 'cross') {
             fields[index] = cross;
-            currentPlayer = 'circle';
+            currentPlayer = 'ring';
         } else {
-            fields[index] = circle;
+            fields[index] = ring;
             currentPlayer = 'cross';
         }
         render();
+        const winningCombination = checkWin();
+        if (winningCombination) {
+            gameOver = true;
+            drawWinningLine(winningCombination);
+            setTimeout(() => {
+                alert(currentPlayer === 'cross' ? 'Ring gewinnt!' : 'Kreuz gewinnt!');
+            }, 100);
+        }
     }
+}
+
+function checkWin() {
+    const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (fields[a] && fields[a] === fields[b] && fields[a] === fields[c]) {
+            return combination;
+        }
+    }
+    return null;
+}
+
+function drawWinningLine(combination) {
+    const lineColor = '#ffffff';
+    const lineWidth = 5;
+
+    const startCell = document.querySelectorAll('td')[combination[0]];
+    const endCell = document.querySelectorAll('td')[combination[2]];
+    const startRect = startCell.getBoundingClientRect();
+    const endRect = endCell.getBoundingClientRect();
+
+    const contentRect = document.getElementById('content').getBoundingClientRect();
+
+    const startX = startRect.left + startRect.width / 2 - contentRect.left;
+    const startY = startRect.top + startRect.height / 2 - contentRect.top;
+    const endX = endRect.left + endRect.width / 2 - contentRect.left;
+    const endY = endRect.top + endRect.height / 2 - contentRect.top;
+
+    const lineLength = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+    const lineAngle = Math.atan2(endY - startY, endX - startX);
+
+    const line = document.createElement('div');
+    line.style.position = 'absolute';
+    line.style.width = `${lineLength}px`;
+    line.style.height = `${lineWidth}px`;
+    line.style.backgroundColor = lineColor;
+    line.style.top = `${startY - lineWidth / 2}px`;
+    line.style.left = `${startX}px`;
+    line.style.transformOrigin = '0 50%'; // Damit sich die Linie vom linken Rand aus erstreckt
+    line.style.transform = `rotate(${lineAngle}rad)`;
+    document.getElementById('content').appendChild(line);
 }
