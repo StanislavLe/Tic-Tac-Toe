@@ -1,11 +1,11 @@
-const cross = 'X'; // Zuweisung für Spieler mit Kreuz Symbol
-const circle = 'O'; // Zuweisung für Spieler mit Kreis Symbol
+const cross = getAnimatedCross(); // Zuweisung für Spieler mit Kreuz Symbol
+const circle = getAnimatedCircle(); // Zuweisung für Spieler mit Kreis Symbol
 
 let fields = [  // Array mit Feldzuständen
     cross,
     cross,
     cross,
-    circle,
+    null,
     circle,
     null,
     circle,
@@ -28,4 +28,59 @@ function render() { // Sobald <body> geladen ist wird die function ausgeführt
 
     html += '</table>'; // Tabelle wird geschlossen
     content.innerHTML = html; // Tabelle wird in den div Container content geschrieben 
+}
+
+
+function getAnimatedCircle() {
+    return `
+        <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="40" fill="transparent">
+                <animate 
+                    attributeName="fill" 
+                    from="transparent" 
+                    to="blue" 
+                    dur="2s" 
+                    fill="freeze"
+                    begin="0s" />
+            </circle>
+        </svg>`;
+}
+
+
+function getAnimatedCross() {
+    return `
+        <svg viewBox="0 0 100 100">
+            <line x1="20" y1="20" x2="80" y2="80" stroke="red" stroke-width="5">
+                <animate 
+                    attributeName="x2" 
+                    from="20" 
+                    to="80" 
+                    dur="1s" 
+                    fill="freeze"
+                    begin="0s" />
+                <animate 
+                    attributeName="y2" 
+                    from="20" 
+                    to="80" 
+                    dur="1s" 
+                    fill="freeze"
+                    begin="0s" />
+            </line>
+            <line x1="80" y1="20" x2="20" y2="80" stroke="red" stroke-width="5">
+                <animate 
+                    attributeName="x2" 
+                    from="80" 
+                    to="20" 
+                    dur="1s" 
+                    fill="freeze"
+                    begin="0.5s" />
+                <animate 
+                    attributeName="y2" 
+                    from="20" 
+                    to="80" 
+                    dur="1s" 
+                    fill="freeze"
+                    begin="0.5s" />
+            </line>
+        </svg>`;
 }
