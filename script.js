@@ -110,6 +110,23 @@ function handleClick(index) {
     }
 }
 
+
+function restartGame() {
+    fields = [  
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ];
+    render()
+}
+
+
 function checkWin() {
     const winningCombinations = [
         [0, 1, 2],
